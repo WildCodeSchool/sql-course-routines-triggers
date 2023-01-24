@@ -1,0 +1,33 @@
+-- --
+
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS users;
+
+-- --
+
+CREATE TABLE users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  nb_comments INT NOT NULL DEFAULT 0,
+  nb_posts INT NOT NULL DEFAULT 0
+);
+-- 
+CREATE TABLE posts (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  body VARCHAR(255) NOT NULL,
+  nb_comments INT NOT NULL DEFAULT 0,
+  user_id INT NOT NULL REFERENCES users(id)
+);
+-- 
+CREATE TABLE comments (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  body VARCHAR(255) NOT NULL,
+  user_id INT NOT NULL REFERENCES users(id),
+  post_id INT NOT NULL REFERENCES posts(id)
+);
+
+-- --

@@ -1,0 +1,45 @@
+DROP FUNCTION IF EXISTS getLastPostId;
+DELIMITER $
+CREATE FUNCTION getLastPostId()
+RETURNS INT
+READS SQL DATA
+BEGIN
+  DECLARE lastPostId INT;
+  SELECT p.id INTO lastPostId
+  FROM posts p
+  ORDER BY p.id DESC
+  LIMIT 1;
+  RETURN lastPostId;
+END$
+DELIMITER ;
+
+SELECT getLastPostId();
+
+SELECT *
+FROM comments
+WHERE post_id = getLastPostId();
+
+
+-- are they deterministic?
+
+DROP FUNCTION IF EXISTS sumThese;
+DELIMITER $
+CREATE FUNCTION sumThese(a INT, b INT)
+RETURNS INT
+-- DETERMINISTIC ?
+BEGIN
+  RETURN a + b;
+END $
+DELIMITER ;
+
+SELECT sumThese(1, 1);
+
+
+DROP FUNCTION IF EXISTS getNow;
+CREATE FUNCTION getNow()
+RETURNS DATETIME
+-- DETERMINISTIC ?
+RETURN CURRENT_TIMESTAMP();
+
+SELECT getNow();
+
